@@ -1,4 +1,4 @@
-fetch("/api/surveys/installations/697e3220babd563bdc5cb817/surveys/active", {
+fetch("/api/tokens/691e4e20744d5e6d95f51f40", {
   method: "GET",
   credentials: "include"
 })
